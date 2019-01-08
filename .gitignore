@@ -1,2 +1,5 @@
-./test/
-./train/
+/test/*
+
+/train/*
+
+*.jpg
