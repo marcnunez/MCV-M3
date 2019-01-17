@@ -11,8 +11,6 @@ from keras.utils import plot_model
 import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
-import xlsxwriter
-
 from scipy.misc import imresize
 
 
@@ -26,17 +24,13 @@ def main():
         DIRECTORY_PATH = str(sys.argv[1])
     else:
         DIRECTORY_PATH = "one"
-    
-    workbook = xlsxwriter.Workbook('/home/grupo07/week3/out/' + DIRECTORY_PATH + '.xlsx')
-    worksheet = workbook.add_worksheet()
-
-    
+        
     DATASET_DIR = '/home/grupo07/mcv/datasets/MIT_split'
-    ACTIVATIONS = ['selu', 'softsign', 'relu', 'tanh', 'hard_sigmoid', 'exponential']
+    ACTIVATIONS = ['softmax', 'elu', 'selu', 'softplus', 'softsign', 'relu', 'tanh', 'sigmoid', 'hard_sigmoid', 'exponential', 'linear']
     for ACTIVATION in ACTIVATIONS:
         RELATIVE_PATH = '/home/grupo07/week3/out/' + DIRECTORY_PATH + '/' + ACTIVATION + '/'
 
-        for UNIT in range(9,12):
+        for UNIT in range(7,12):
             UNIT_POW = 2**UNIT
             
             if not os.path.exists(DATASET_DIR):
@@ -50,12 +44,12 @@ def main():
             model.add(Reshape((IMG_SIZE * IMG_SIZE * 3,), input_shape=(IMG_SIZE, IMG_SIZE, 3), name='first'))
             model.add(Dense(units=UNIT_POW, activation=ACTIVATION, name='second'))
             if (DIRECTORY_PATH == 'two'):
-                model.add(Dense(units=UNIT_POW, activation=ACTIVATION, name='third'))
+                model.add(Dense(units=UNIT_POW, activation=ACTIVATION))
             elif (DIRECTORY_PATH == 'three'):
-                model.add(Dense(units=UNIT_POW, activation=ACTIVATION, name='third'))
-                model.add(Dense(units=UNIT_POW, activation=ACTIVATION, name='fourth'))
+                model.add(Dense(units=UNIT_POW, activation=ACTIVATION))
+                model.add(Dense(units=UNIT_POW, activation=ACTIVATION))
     
-            model.add(Dense(units=8, activation=ACTIVATION, name='last'))
+            model.add(Dense(units=8, activation=ACTIVATION))
             model.compile(loss='categorical_crossentropy',
                           optimizer='sgd',
                           metrics=['accuracy'])
@@ -114,40 +108,35 @@ def main():
             print('Done!\n')
             
             # summarize history for accuracy
-#            plt.plot(history.history['acc'])
-#            plt.plot(history.history['val_acc'])
-#            plt.title('model accuracy')
-#            plt.ylabel('accuracy')
-#            plt.xlabel('epoch')
-#            plt.legend(['train', 'validation'], loc='upper left')
-#            plt.savefig(RELATIVE_PATH  + ACTIVATION +'_'+ UNIT_POW +'_accuracy.jpg')
-#            plt.close()
-#            # summarize history for loss
-#            plt.plot(history.history['loss'])
-#            plt.plot(history.history['val_loss'])
-#            plt.title('model loss')
-#            plt.ylabel('loss')
-#            plt.xlabel('epoch')
-#            plt.legend(['train', 'validation'], loc='upper left')
-#            plt.savefig(RELATIVE_PATH + ACTIVATION +'_'+ UNIT_POW +'_loss.jpg')
+            plt.plot(history.history['acc'])
+            plt.plot(history.history['val_acc'])
+            plt.title('model accuracy')
+            plt.ylabel('accuracy')
+            plt.xlabel('epoch')
+            plt.legend(['train', 'validation'], loc='upper left')
+            plt.savefig(RELATIVE_PATH  + ACTIVATION +'_'+ UNIT_POW +'_accuracy.jpg')
+            plt.close()
+            # summarize history for loss
+            plt.plot(history.history['loss'])
+            plt.plot(history.history['val_loss'])
+            plt.title('model loss')
+            plt.ylabel('loss')
+            plt.xlabel('epoch')
+            plt.legend(['train', 'validation'], loc='upper left')
+            plt.savefig(RELATIVE_PATH + ACTIVATION +'_'+ UNIT_POW +'_loss.jpg')
             
+            # to get the output of a given layer
+            # crop the model up to a certain layer
+            model_layer = Model(inputs=model.input, outputs=model.get_layer('second').output)
             
-#            
-#            # to get the output of a given layer
-#            # crop the model up to a certain layer
-#            model_layer = Model(inputs=model.input, outputs=model.get_layer('second').output)
-#            
-#            # get the features from images
-#            directory = DATASET_DIR + '/test/coast'
-#            x = np.asarray(Image.open(os.path.join(directory, os.listdir(directory)[0])))
-#            x = np.expand_dims(imresize(x, (IMG_SIZE, IMG_SIZE, 3)), axis=0)
-#            print('prediction for image ' + os.path.join(directory, os.listdir(directory)[0]))
-#            features = model_layer.predict(x / 255.0)
-#            print(features)
-#            print('Done!')
-            
-    workbook.close()
-
+            # get the features from images
+            directory = DATASET_DIR + '/test/coast'
+            x = np.asarray(Image.open(os.path.join(directory, os.listdir(directory)[0])))
+            x = np.expand_dims(imresize(x, (IMG_SIZE, IMG_SIZE, 3)), axis=0)
+            print('prediction for image ' + os.path.join(directory, os.listdir(directory)[0]))
+            features = model_layer.predict(x / 255.0)
+            print(features)
+            print('Done!')
 
 
 if __name__ == "__main__":

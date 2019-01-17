@@ -1,0 +1,12 @@
+/var/slurm/SlurmdSpoolDir/job18913/slurm_script: línea 10: cd: week3: No existe el archivo o el directorio
+2019-01-17 12:27:05.520216: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-01-17 12:27:07.085552: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1432] Found device 0 with properties: 
+name: TITAN X (Pascal) major: 6 minor: 1 memoryClockRate(GHz): 1.531
+pciBusID: 0000:04:00.0
+totalMemory: 11.91GiB freeMemory: 11.75GiB
+2019-01-17 12:27:07.085637: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1511] Adding visible gpu devices: 0
+2019-01-17 12:27:07.502758: I tensorflow/core/common_runtime/gpu/gpu_device.cc:982] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-01-17 12:27:07.502835: I tensorflow/core/common_runtime/gpu/gpu_device.cc:988]      0 
+2019-01-17 12:27:07.502849: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1001] 0:   N 
+2019-01-17 12:27:07.503253: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1115] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11374 MB memory) -> physical GPU (device: 0, name: TITAN X (Pascal), pci bus id: 0000:04:00.0, compute capability: 6.1)
+slurmstepd: error: *** JOB 18913 ON etse-75-51 CANCELLED AT 2019-01-17T12:28:18 ***

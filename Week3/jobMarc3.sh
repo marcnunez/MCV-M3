@@ -8,4 +8,4 @@
 #SBATCH -e out/%x_%u_%j.err # File to which STDERR will be written
 
 cd week3
-python3 mlp_MIT_8_scene.py "one"
+python3 mlp_MIT_8_scene.py "three"
